@@ -78,18 +78,22 @@ function getMetadata(item) {
         itemAuthors = [];
     metadata.string = "**Metadata**";
     metadata.children = [];
-    metadata.children.push({
-        "string": "Author(s):: " + getAuthors(item)
-    });
+    if (item.creators) {
+        metadata.children.push({
+            "string": "Author(s):: " + getAuthors(item)
+        });
+    }
     metadata.children.push({
         "string": "Topics:: " + item.collections.toString()
     });
     metadata.children.push({
         "string": "Type:: [[" + item.itemType + "]]"
     });
-    metadata.children.push({
-        "string": "Date:: " + ZU.strToISO(item.date)
-    });
+    if (item.date) {
+        metadata.children.push({
+            "string": "Date:: " + ZU.strToISO(item.date)
+        });
+    }
     if (item.url) {
         metadata.children.push({
             "string": "URL:: [" + item.url + "](" + item.url + ")"
