@@ -181,7 +181,7 @@ function getMetadata(item) {
             "string": "Tags:: " + item.tags.map(o => "#[[" + o.tag + "]]").join(", ")
         });
     }
-    if (typeof item.relations === "object") {
+    if (Object.keys(item.relations).length) {
         // TODO: get metadata of related items (just URLs for now)
         metadata.children.push({
              "string": "Related:: " + Object.values(item.relations)[0].join(", ")
