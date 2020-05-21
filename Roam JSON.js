@@ -62,13 +62,24 @@ function getTopics(item) {
     return collectionTitles;
 }
 
+function getAuthors(item) {
+    var creators = item.creators, authorsArray = [], authorsString;
+    for (const author of creators) {
+        if (author.creatorType == "author") {
+            authorsArray.push("[[" + ZU.trim(author.firstName) + " " + ZU.trim(author.lastName) + "]]");
+        }
+    }
+    authorsString = authorsArray.join(", ");
+    return authorsString;
+}
+
 function getMetadata(item) {
     var metadata = {},
         itemAuthors = [];
     metadata.string = "**Metadata**";
     metadata.children = [];
     metadata.children.push({
-        "string": "Author(s):: " + item.creators.map(o => "[[" + o.firstName + " " + o.lastName + "]]").join(", ")
+        "string": "Author(s):: " + getAuthors(item)
     });
     metadata.children.push({
         "string": "Topics:: " + item.collections.toString()
