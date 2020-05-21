@@ -26,15 +26,11 @@ function cleanHtml(html) {
     cleanhtml = cleanhtml.replace(/([^+>]*)[^<]*(<a [^>]*(href="([^>^\"]*)")[^>]*>)([^<]+)(<\/a>[)])/gi, "$1___$2 ([$5]($4))"); // Convert anchors to markdown
     cleanhtml = cleanhtml.replace(/<[^>]*>?/gm, ""); // Strip remaining tags
     // TODO retain soft linebreaks within the paragraph
-
-
-
-
     return cleanhtml;
 }
 
 /* Get collections object */
-function get1Collections() {
+function getCollections() {
     var collections = [];
     while (collection = Zotero.nextCollection()) { // First grab all the collections
         // collections[collection.primary.key] = {};
@@ -83,12 +79,16 @@ function getMetadata(item) {
     metadata.children.push({
         "string": "Date:: " + ZU.strToISO(item.date)
     });
-    metadata.children.push({
-        "string": "URL:: [" + item.url + "](" + item.url + ")"
-    });
-    metadata.children.push({
-        "string": "Tags:: " + item.tags.map(o => "#[[" + o.tag + "]]").join(", ")
-    });
+    if (item.url) {
+        metadata.children.push({
+            "string": "URL:: [" + item.url + "](" + item.url + ")"
+        });
+    }
+    if (item.tags) {
+        metadata.children.push({
+            "string": "Tags:: " + item.tags.map(o => "#[[" + o.tag + "]]").join(", ")
+        });
+    }
     return metadata;
 }
 
@@ -123,7 +123,8 @@ function doExport() {
 }
 
 
-
+    collections = getCollections();
+    Z.write(ZU.varDump(collections));
 
 
     var item, exportData = [];
@@ -153,7 +154,7 @@ function doExport() {
     /*
 
         articles = getArticles();
-        collections = getCollections();
+
 
 
         // Add articles to their respective collection(s)
