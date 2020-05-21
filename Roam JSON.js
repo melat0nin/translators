@@ -50,8 +50,11 @@ function getCollectionName(id) {
     return collections[id].name;
 }
 
-function getTopics(item) {
-    var itemCollections = item.collections,
+function getItemCollections(item) {
+    // TODO: Get collection names to be [[linked]] and build out Roam topic links
+    return item.collections.toString();
+
+    /*var itemCollections = item.collections,
         collectionTitlesArray = [],
         collectionTitle, collectionTitles;
     for (const collection of itemCollections) {
@@ -59,7 +62,7 @@ function getTopics(item) {
         collectionTitlesArray.push(collectionTitle);
     }
     collectionTitles = collectionTitlesArray.join(", ");
-    return collectionTitles;
+    return collectionTitles;*/
 }
 
 function getItemType(item) {
@@ -161,7 +164,7 @@ function getMetadata(item) {
         });
     }
     metadata.children.push({
-        "string": "Topics:: " + item.collections.toString()
+        "string": "Topics:: " + getItemCollections(item)
     });
     metadata.children.push({
         "string": "Type:: [[" + getItemType(item) + "]]"
@@ -178,13 +181,12 @@ function getMetadata(item) {
     }
     if (item.tags[0]) {
         metadata.children.push({
-            "string": "Tags:: " + item.tags.map(o => "#[[" + o.tag + "]]").join(", ")
+            "string": "Tags:: " + item.tags.map(o => "#[[" + o.tag + "]]").toString()
         });
     }
     if (Object.keys(item.relations).length) {
-        // TODO: get metadata of related items (just URLs for now)
         metadata.children.push({
-             "string": "Related:: " + Object.values(item.relations)[0].join(", ")
+             "string": "Related:: " + getRelatedItems(item)
         });
     }
 
@@ -214,8 +216,9 @@ function getNotes(item) {
     return notes;
 }
 
-function getRelated(item) {
-
+function getRelatedItems(item) {
+    // TODO: Get the metadata for related items, included as [[links]], to build out Roam's web
+    return Object.values(item.relations)[0].toString()
 }
 
 function doExport() {
