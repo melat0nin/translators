@@ -6,12 +6,11 @@
     "minVersion": "5.0",
     "maxVersion": "",
     "priority": 25,
-    "configOptions": {
-        "getCollections": "true"
-    },
+    "configOptions": {"getCollections": true},
+    "displayOptions": {"exportNotes": true},
     "inRepository": false,
     "translatorType": 2,
-    "lastUpdated": "2020-05-21 00:07:00"
+    "lastUpdated": "2020-05-21 00:09:00"
 }
 
 function cleanHtml(html) {
@@ -23,13 +22,15 @@ function cleanHtml(html) {
         .replace("<blockquote>", "> ")
         .replace("<u>", "**")
         .replace("</u>", "**"); // Convert styles to markdown
+    // TODO ZU.parseMarkup to find anchor tags? https://github.com/zotero/zotero/blob/4.0/chrome/content/zotero/xpcom/utilities.js#L525
     cleanhtml = cleanhtml.replace(/([^+>]*)[^<]*(<a [^>]*(href="([^>^\"]*)")[^>]*>)([^<]+)(<\/a>[)])/gi, "$1___$2 ([$5]($4))"); // Convert anchors to markdown
-    cleanhtml = cleanhtml.replace(/<[^>]*>?/gm, ''); // Strip remaining tags
+    cleanhtml = cleanhtml.replace(/<[^>]*>?/gm, ""); // Strip remaining tags
+    // TODO retain soft linebreaks within the paragraph
     return cleanhtml;
 }
 
 /* Get collections object */
-function getCollections() {
+function get1Collections() {
     var collections = [];
     while (collection = Zotero.nextCollection()) { // First grab all the collections
         // collections[collection.primary.key] = {};
@@ -67,7 +68,7 @@ function getMetadata(item) {
     metadata.string = "**Metadata**";
     metadata.children = [];
     metadata.children.push({
-        "string": "Author:: " + item.creators.map(o => "[[" + o.firstName + " " + o.lastName + "]]").join(", ")
+        "string": "Author(s):: " + item.creators.map(o => "[[" + o.firstName + " " + o.lastName + "]]").join(", ")
     });
     metadata.children.push({
         "string": "Topics:: " + item.collections.toString()
@@ -76,13 +77,13 @@ function getMetadata(item) {
         "string": "Type:: [[" + item.itemType + "]]"
     });
     metadata.children.push({
-        "string": "Date:: " + item.date
+        "string": "Date:: " + ZU.strToISO(item.date)
     });
     metadata.children.push({
         "string": "URL:: [" + item.url + "](" + item.url + ")"
     });
     metadata.children.push({
-        "string": "Tags:: " + item.tags.map(o => o.tag).join(", ")
+        "string": "Tags:: " + item.tags.map(o => "#[[" + o.tag + "]]").join(", ")
     });
     return metadata;
 }
@@ -112,36 +113,32 @@ function getNotes(item) {
 
 function doExport() {
 
-    var collection, collections = [];
-    while (collection = Zotero.nextCollection()) {
+
+    while(collection = Zotero.nextCollection()) {
         Zotero.debug(collection);
-        collections.push(collection);
-    }
-    Zotero.write(JSON.stringify(collections));
+}
 
 
 
 
-    var item, data = [];
+
+    var item, exportData = [];
     while (item = Zotero.nextItem()) {
-        var roamItem = {},
-            itemChildren = [];
-        roamItem.title = item.title;
-        //var roamChildren = ZU.itemToCSLJSON(item);
-
-
+        var roamItem = {}, itemChildren = [];
+        roamItem.title = ZU.capitalizeTitle(item.title);
         var metadata = getMetadata(item); // Get item metadata
         itemChildren.push(metadata);
-
-        var notes = getNotes(item); // Get notes
-        itemChildren.push(notes);
+        if (Zotero.getOption("exportNotes")) { // Get notes if requested
+            var notes = getNotes(item);
+            itemChildren.push(notes);
+        }
 
 
         roamItem.children = itemChildren;
         //roamItem["edit-time"] = Date.parse(item.dateModified)/1000;
-        data.push(roamItem);
+        exportData.push(roamItem);
     }
-    Zotero.write(JSON.stringify(data, null, "\t"));
+    Zotero.write(JSON.stringify(exportData, null, "\t"));
 
 
 
