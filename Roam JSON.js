@@ -20,12 +20,16 @@ function cleanHtml(html) {
         .replace("<em>", "__")
         .replace("</em>", "__")
         .replace("<blockquote>", "> ")
-        .replace("<u>", "**")
-        .replace("</u>", "**"); // Convert styles to markdown
+        .replace("<u>", "^^")
+        .replace("</u>", "^^"); // Convert styles to markdown
     // TODO ZU.parseMarkup to find anchor tags? https://github.com/zotero/zotero/blob/4.0/chrome/content/zotero/xpcom/utilities.js#L525
     cleanhtml = cleanhtml.replace(/([^+>]*)[^<]*(<a [^>]*(href="([^>^\"]*)")[^>]*>)([^<]+)(<\/a>[)])/gi, "$1___$2 ([$5]($4))"); // Convert anchors to markdown
     cleanhtml = cleanhtml.replace(/<[^>]*>?/gm, ""); // Strip remaining tags
     // TODO retain soft linebreaks within the paragraph
+
+
+
+
     return cleanhtml;
 }
 
@@ -124,6 +128,11 @@ function doExport() {
 
     var item, exportData = [];
     while (item = Zotero.nextItem()) {
+
+
+
+
+
         var roamItem = {}, itemChildren = [];
         roamItem.title = ZU.capitalizeTitle(item.title);
         var metadata = getMetadata(item); // Get item metadata
@@ -132,8 +141,6 @@ function doExport() {
             var notes = getNotes(item);
             itemChildren.push(notes);
         }
-
-
         roamItem.children = itemChildren;
         //roamItem["edit-time"] = Date.parse(item.dateModified)/1000;
         exportData.push(roamItem);
