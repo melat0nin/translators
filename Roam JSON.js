@@ -94,17 +94,16 @@ function getNotes(item) {
     notes.children = [];
 
     for (const note of item.notes) {
-        // put child part here to group the same paras under one note heading
-        var parasArray = note.note.split("\n"),
+        var parasArray = note.note.split("\n"), // Convert linebreaks to individual nodes
             thisNoteObj = {},
             noteArray = [];
-        thisNoteObj.string = cleanHtml(parasArray[0]);
+        thisNoteObj.string = cleanHtml(parasArray[0]); // Take first line as note's heading
         for (const para of parasArray) {
             noteArray.push({
                 "string": cleanHtml(para)
             });
         }
-        noteArray.splice(0, 1);
+        noteArray.splice(0, 1); // Don't repeat the first line (been used as heading)
         thisNoteObj.children = noteArray;
         notes.children.push(thisNoteObj);
     }
@@ -116,8 +115,9 @@ function doExport() {
     var collection, collections = [];
     while (collection = Zotero.nextCollection()) {
         Zotero.debug(collection);
-        collection.push(collection);
+        collections.push(collection);
     }
+    Zotero.write(JSON.stringify(collections));
 
 
 
