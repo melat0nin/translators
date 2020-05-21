@@ -62,6 +62,79 @@ function getTopics(item) {
     return collectionTitles;
 }
 
+function getItemType(item) {
+    var zoteroType = item.itemType, type;
+    // Adapted from Zotero RDF translator -- https://github.com/zotero/translators/blob/master/Zotero%20RDF.js
+    if (item.url && ( item.url.includes("arxiv") || item.url.includes("ssrn") ) ) {
+        type = "Preprint";
+    } else if (zoteroType == "book") {
+		type = "Book";
+	} else if (zoteroType == "bookSection") {
+		type = "Chapter";
+	} else if (zoteroType == "journalArticle") {
+		type = "Article";
+	} else if (zoteroType == "magazineArticle") {
+		type = "Magazine article";
+	} else if (zoteroType == "newspaperArticle") {
+		type = "Newspaper article";
+	} else if (zoteroType == "thesis") {
+		type = "Thesis";
+	} else if (zoteroType == "letter") {
+		type = "Letter";
+	} else if (zoteroType == "manuscript") {
+		type = "Manuscript";
+	} else if (zoteroType == "interview") {
+		type = "Interview";
+	} else if (zoteroType == "film") {
+		type = "Film";
+	} else if (zoteroType == "artwork") {
+		type = "Illustration";
+	} else if (zoteroType == "webpage") {
+		type = "Webpage";
+	} else if (zoteroType == "report") {
+        type = "Report";
+	} else if (zoteroType == "bill") {
+		type = "Legislation";
+	} else if (zoteroType == "case") {
+		type = "Legal case";
+	} else if (zoteroType == "hearing") {
+		type = "Hearing";
+	} else if (zoteroType == "patent") {
+		type = "Patent";
+	} else if (zoteroType == "statute") {
+		type = "Legislation";
+	} else if (zoteroType == "email") {
+		type = "Letter";
+	} else if (zoteroType == "map") {
+		type = "Image";
+	} else if (zoteroType == "blogPost") {
+		type = "Blog post";
+	} else if (zoteroType == "instantMessage") {
+		type = "Instant message";
+	} else if (zoteroType == "forumPost") {
+		type = "Forum post";
+	} else if (zoteroType == "audioRecording") {
+		type = "Recording";
+	} else if (zoteroType == "presentation") {
+		type = "Presentation";
+	} else if (zoteroType == "videoRecording") {
+		type = "Recording";
+	} else if (zoteroType == "tvBroadcast") {
+		type = "TV broadcast";
+	} else if (zoteroType == "radioBroadcast") {
+		type = "Radio broadcast";
+	} else if (zoteroType == "podcast") {
+		type = "Podcast";
+	} else if (zoteroType == "computerProgram") {
+		type = "Data";
+	} else if (zoteroType == "encyclopediaArticle") {
+		type = "Encyclopaedia article";
+	} else if (zoteroType == "conferencePaper") {
+		type = "Conference paper";
+	}
+    return type;
+}
+
 function getAuthors(item) {
     var creators = item.creators, authorsArray = [], authorsString;
     for (const author of creators) {
@@ -91,7 +164,7 @@ function getMetadata(item) {
         "string": "Topics:: " + item.collections.toString()
     });
     metadata.children.push({
-        "string": "Type:: [[" + item.itemType + "]]"
+        "string": "Type:: [[" + getItemType(item) + "]]"
     });
     if (item.date) {
         metadata.children.push({
