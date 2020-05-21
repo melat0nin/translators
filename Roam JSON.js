@@ -30,7 +30,7 @@ function cleanHtml(html) {
 }
 
 /* Get collections object */
-function getCollections() {
+function get1Collections() {
     var collections = [];
     while (collection = Zotero.nextCollection()) { // First grab all the collections
         // collections[collection.primary.key] = {};
@@ -66,7 +66,11 @@ function getAuthors(item) {
     var creators = item.creators, authorsArray = [], authorsString;
     for (const author of creators) {
         if (author.creatorType == "author") {
-            authorsArray.push("[[" + ZU.trim(author.firstName) + " " + ZU.trim(author.lastName) + "]]");
+            var authString = "";
+            if (author.firstName) authString += author.firstName;
+            if (author.lastName) authString += " " + author.lastName;
+            authString = "[[" + ZU.trim(authString) + "]]";
+            authorsArray.push(authString);
         }
     }
     authorsString = authorsArray.join(", ");
@@ -78,7 +82,7 @@ function getMetadata(item) {
         itemAuthors = [];
     metadata.string = "**Metadata**";
     metadata.children = [];
-    if (item.creators) {
+    if (typeof item.creators[0] === "object") {
         metadata.children.push({
             "string": "Author(s):: " + getAuthors(item)
         });
@@ -132,25 +136,15 @@ function getNotes(item) {
 
 function doExport() {
 
-
-    while(collection = Zotero.nextCollection()) {
-        Zotero.debug(collection);
-}
-
-
-    collections = getCollections();
-    Z.write(ZU.varDump(collections));
-
-
     var item, exportData = [];
     while (item = Zotero.nextItem()) {
 
-
+        //Z.debug(ZU.varDump(item.getCollections()));
 
 
 
         var roamItem = {}, itemChildren = [];
-        roamItem.title = ZU.capitalizeTitle(item.title);
+        roamItem.title = item.title;
         var metadata = getMetadata(item); // Get item metadata
         itemChildren.push(metadata);
         if (Zotero.getOption("exportNotes")) { // Get notes if requested
