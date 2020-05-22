@@ -203,7 +203,7 @@ function doExport() {
         roamItem.title = item.title;
         var metadata = getMetadata(item); // Get item metadata
         itemChildren.push(metadata);
-        if (Zotero.getOption("exportNotes")) { // Get notes if requested
+        if (Zotero.getOption("exportNotes") && item.notes.length) { // Get notes if requested
             var notes = getNotes(item);
             itemChildren.push(notes);
         }
