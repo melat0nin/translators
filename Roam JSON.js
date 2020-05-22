@@ -6,11 +6,15 @@
     "minVersion": "5.0",
     "maxVersion": "",
     "priority": 25,
-    "configOptions": {"getCollections": true},
-    "displayOptions": {"exportNotes": true},
+    "configOptions": {
+        "getCollections": true
+    },
+    "displayOptions": {
+        "exportNotes": true
+    },
     "inRepository": false,
     "translatorType": 2,
-    "lastUpdated": "2020-05-21 00:09:00"
+    "lastUpdated": "2020-05-22 08:00:00"
 }
 
 function cleanHtml(html) {
@@ -29,117 +33,89 @@ function cleanHtml(html) {
     return cleanhtml;
 }
 
-/* Get collections object */
-function get1Collections() {
-    var collections = [];
-    while (collection = Zotero.nextCollection()) { // First grab all the collections
-        // collections[collection.primary.key] = {};
-        // collections[collection.primary.key].parentKey = collection.fields.parentKey;
-        // collections[collection.primary.key].title = collection.fields.name;
-        // collections[collection.primary.key].articles = {};
-        // collections[collection.primary.key].collections = {};
-        collections.push(collection);
-        //collectionKeys.push(collection.primary.key);
-    }
-
-    return collections;
-}
-
-function getCollectionName(id) {
-    var collections = getCollections();
-    return collections[id].name;
-}
-
 function getItemCollections(item) {
     // TODO: Get collection names to be [[linked]] and build out Roam topic links
     return item.collections.toString();
-
-    /*var itemCollections = item.collections,
-        collectionTitlesArray = [],
-        collectionTitle, collectionTitles;
-    for (const collection of itemCollections) {
-        collectionTitle = getCollectionName(collection);
-        collectionTitlesArray.push(collectionTitle);
-    }
-    collectionTitles = collectionTitlesArray.join(", ");
-    return collectionTitles;*/
 }
 
 function getItemType(item) {
-    var zoteroType = item.itemType, type;
+    var zoteroType = item.itemType,
+        type;
     // Adapted from Zotero RDF translator -- https://github.com/zotero/translators/blob/master/Zotero%20RDF.js
-    if (item.url && ( item.url.includes("arxiv") || item.url.includes("ssrn") ) ) {
+    if (item.url && (item.url.includes("arxiv") || item.url.includes("ssrn"))) {
         type = "Preprint";
     } else if (zoteroType == "book") {
-		type = "Book";
-	} else if (zoteroType == "bookSection") {
-		type = "Chapter";
-	} else if (zoteroType == "journalArticle") {
-		type = "Article";
-	} else if (zoteroType == "magazineArticle") {
-		type = "Magazine article";
-	} else if (zoteroType == "newspaperArticle") {
-		type = "Newspaper article";
-	} else if (zoteroType == "thesis") {
-		type = "Thesis";
-	} else if (zoteroType == "letter") {
-		type = "Letter";
-	} else if (zoteroType == "manuscript") {
-		type = "Manuscript";
-	} else if (zoteroType == "interview") {
-		type = "Interview";
-	} else if (zoteroType == "film") {
-		type = "Film";
-	} else if (zoteroType == "artwork") {
-		type = "Illustration";
-	} else if (zoteroType == "webpage") {
-		type = "Webpage";
-	} else if (zoteroType == "report") {
+        type = "Book";
+    } else if (zoteroType == "bookSection") {
+        type = "Chapter";
+    } else if (zoteroType == "journalArticle") {
+        type = "Article";
+    } else if (zoteroType == "magazineArticle") {
+        type = "Magazine article";
+    } else if (zoteroType == "newspaperArticle") {
+        type = "Newspaper article";
+    } else if (zoteroType == "thesis") {
+        type = "Thesis";
+    } else if (zoteroType == "letter") {
+        type = "Letter";
+    } else if (zoteroType == "manuscript") {
+        type = "Manuscript";
+    } else if (zoteroType == "interview") {
+        type = "Interview";
+    } else if (zoteroType == "film") {
+        type = "Film";
+    } else if (zoteroType == "artwork") {
+        type = "Illustration";
+    } else if (zoteroType == "webpage") {
+        type = "Webpage";
+    } else if (zoteroType == "report") {
         type = "Report";
-	} else if (zoteroType == "bill") {
-		type = "Legislation";
-	} else if (zoteroType == "case") {
-		type = "Legal case";
-	} else if (zoteroType == "hearing") {
-		type = "Hearing";
-	} else if (zoteroType == "patent") {
-		type = "Patent";
-	} else if (zoteroType == "statute") {
-		type = "Legislation";
-	} else if (zoteroType == "email") {
-		type = "Letter";
-	} else if (zoteroType == "map") {
-		type = "Image";
-	} else if (zoteroType == "blogPost") {
-		type = "Blog post";
-	} else if (zoteroType == "instantMessage") {
-		type = "Instant message";
-	} else if (zoteroType == "forumPost") {
-		type = "Forum post";
-	} else if (zoteroType == "audioRecording") {
-		type = "Recording";
-	} else if (zoteroType == "presentation") {
-		type = "Presentation";
-	} else if (zoteroType == "videoRecording") {
-		type = "Recording";
-	} else if (zoteroType == "tvBroadcast") {
-		type = "TV broadcast";
-	} else if (zoteroType == "radioBroadcast") {
-		type = "Radio broadcast";
-	} else if (zoteroType == "podcast") {
-		type = "Podcast";
-	} else if (zoteroType == "computerProgram") {
-		type = "Data";
-	} else if (zoteroType == "encyclopediaArticle") {
-		type = "Encyclopaedia article";
-	} else if (zoteroType == "conferencePaper") {
-		type = "Conference paper";
-	}
+    } else if (zoteroType == "bill") {
+        type = "Legislation";
+    } else if (zoteroType == "case") {
+        type = "Legal case";
+    } else if (zoteroType == "hearing") {
+        type = "Hearing";
+    } else if (zoteroType == "patent") {
+        type = "Patent";
+    } else if (zoteroType == "statute") {
+        type = "Legislation";
+    } else if (zoteroType == "email") {
+        type = "Letter";
+    } else if (zoteroType == "map") {
+        type = "Image";
+    } else if (zoteroType == "blogPost") {
+        type = "Blog post";
+    } else if (zoteroType == "instantMessage") {
+        type = "Instant message";
+    } else if (zoteroType == "forumPost") {
+        type = "Forum post";
+    } else if (zoteroType == "audioRecording") {
+        type = "Recording";
+    } else if (zoteroType == "presentation") {
+        type = "Presentation";
+    } else if (zoteroType == "videoRecording") {
+        type = "Recording";
+    } else if (zoteroType == "tvBroadcast") {
+        type = "TV broadcast";
+    } else if (zoteroType == "radioBroadcast") {
+        type = "Radio broadcast";
+    } else if (zoteroType == "podcast") {
+        type = "Podcast";
+    } else if (zoteroType == "computerProgram") {
+        type = "Data";
+    } else if (zoteroType == "encyclopediaArticle") {
+        type = "Encyclopaedia article";
+    } else if (zoteroType == "conferencePaper") {
+        type = "Conference paper";
+    }
     return type;
 }
 
 function getAuthors(item) {
-    var creators = item.creators, authorsArray = [], authorsString;
+    var creators = item.creators,
+        authorsArray = [],
+        authorsString;
     for (const author of creators) {
         if (author.creatorType == "author") {
             var authString = "";
@@ -186,15 +162,13 @@ function getMetadata(item) {
     }
     if (Object.keys(item.relations).length) {
         metadata.children.push({
-             "string": "Related:: " + getRelatedItems(item)
+            "string": "Related:: " + getRelatedItems(item)
         });
     }
-
     return metadata;
 }
 
 function getNotes(item) {
-    // TODO - headings, separate notes, summary note
     var notes = {};
     notes.string = "**Notes**";
     notes.children = [];
@@ -222,19 +196,10 @@ function getRelatedItems(item) {
 }
 
 function doExport() {
-
-    /* Forget collections for now
-    var collections = [];
-    while (collection = Zotero.nextCollection()) {
-        collections.push(collection);
-    }
-    Z.write(ZU.varDump(collections));
-    */
-
     var item, exportData = [];
     while (item = Zotero.nextItem()) {
-        Z.write(ZU.varDump(item));
-        var roamItem = {}, itemChildren = [];
+        var roamItem = {},
+            itemChildren = [];
         roamItem.title = item.title;
         var metadata = getMetadata(item); // Get item metadata
         itemChildren.push(metadata);
@@ -243,7 +208,7 @@ function doExport() {
             itemChildren.push(notes);
         }
         roamItem.children = itemChildren;
-        roamItem["edit-time"] = Date.parse(ZU.strToISO(item.dateModified))/1000;
+        roamItem["edit-time"] = Date.parse(ZU.strToISO(item.dateModified)) / 1000;
         exportData.push(roamItem);
     }
     Zotero.write(JSON.stringify(exportData, null, "\t"));
