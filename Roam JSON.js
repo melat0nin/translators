@@ -150,6 +150,19 @@ function getMetadata(item) {
             "string": "Date:: " + ZU.strToISO(item.date)
         });
     }
+    if (item.attachments.length) {
+        var attachmentURIs = [];
+        for (const [i,attachment] of item.attachments.entries()) {
+            if (attachment.contentType == "application/pdf") {
+                let attString = "[PDF " + (i+1) + "](zotero://open-pdf/library/items/";
+                attString += attachment.uri.substring(attachment.uri.lastIndexOf('/') + 1) + ")";
+                attachmentURIs.push(attString);
+            }
+        }
+        metadata.children.push({
+            "string": "Zotero PDF(s):: " + attachmentURIs.join(", ")
+        });
+    }
     if (item.url) {
         metadata.children.push({
             "string": "URL:: [" + item.url + "](" + item.url + ")"
@@ -198,6 +211,7 @@ function getRelatedItems(item) {
 function doExport() {
     var item, exportData = [];
     while (item = Zotero.nextItem()) {
+        //Z.write(ZU.varDump(item));
         var roamItem = {},
             itemChildren = [];
         roamItem.title = item.title;
