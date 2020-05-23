@@ -14,7 +14,7 @@
     },
     "inRepository": false,
     "translatorType": 2,
-    "lastUpdated": "2020-05-22 08:00:00"
+    "lastUpdated": "2020-05-23 08:00:00"
 }
 
 function cleanHtml(html) {
