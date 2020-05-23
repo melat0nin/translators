@@ -116,7 +116,7 @@ function getAuthors(item) {
     var creators = item.creators,
         authorsArray = [],
         authorsString;
-    for (const author of creators) {
+    for (let author of creators) {
         if (author.creatorType == "author") {
             var authString = "";
             if (author.firstName) authString += author.firstName;
@@ -152,7 +152,7 @@ function getMetadata(item) {
     }
     if (item.attachments.length) {
         var attachmentURIs = [];
-        for (const [i,attachment] of item.attachments.entries()) {
+        for (let [i,attachment] of item.attachments.entries()) {
             if (attachment.contentType == "application/pdf") {
                 let attString = "[PDF " + (i+1) + "](zotero://open-pdf/library/items/";
                 attString += attachment.uri.substring(attachment.uri.lastIndexOf('/') + 1) + ")";
@@ -170,7 +170,7 @@ function getMetadata(item) {
     }
     if (item.tags[0]) {
         metadata.children.push({
-            "string": "Tags:: " + item.tags.map(o => "#[[" + o.tag + "]]").toString()
+            "string": "Tags:: " + item.tags.map(o => "#[[" + o.tag + "]]").join(", ")
         });
     }
     if (Object.keys(item.relations).length) {
@@ -186,12 +186,12 @@ function getNotes(item) {
     notes.string = "**Notes**";
     notes.children = [];
 
-    for (const note of item.notes) {
+    for (let note of item.notes) {
         var parasArray = note.note.split("\n"), // Convert linebreaks to individual nodes
             thisNoteObj = {},
             noteArray = [];
         thisNoteObj.string = cleanHtml(parasArray[0]); // Take first line as note's heading
-        for (const para of parasArray) {
+        for (let para of parasArray) {
             noteArray.push({
                 "string": cleanHtml(para)
             });
