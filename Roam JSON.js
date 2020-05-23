@@ -139,9 +139,10 @@ function getMetadata(item) {
             "string": "Author(s):: " + getAuthors(item)
         });
     }
-    metadata.children.push({
-        "string": "Topics:: " + getItemCollections(item)
-    });
+    // TODO: Get collection names to be [[linked]] and build out Roam topic links
+    // metadata.children.push({
+    //     "string": "Topics:: " + getItemCollections(item)
+    // });
     metadata.children.push({
         "string": "Type:: [[" + getItemType(item) + "]]"
     });
