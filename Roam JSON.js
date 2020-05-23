@@ -27,7 +27,7 @@ function cleanHtml(html) {
         .replace("<u>", "^^")
         .replace("</u>", "^^"); // Convert styles to markdown
     // TODO ZU.parseMarkup to find anchor tags? https://github.com/zotero/zotero/blob/4.0/chrome/content/zotero/xpcom/utilities.js#L525
-    cleanhtml = cleanhtml.replace(/([^+>]*)[^<]*(<a [^>]*(href="([^>^\"]*)")[^>]*>)([^<]+)(<\/a>[)])/gi, "$1___$2 ([$5]($4))"); // Convert anchors to markdown
+    cleanhtml = cleanhtml.replace(/([^+>]*)[^<]"*(<a [^>]*(href="([^>^\"]*)")[^>]*>)([^<]+)(<\/a>[)])/gi, "$1___$2 ([$5]($4))"); // Convert anchors to markdown
     cleanhtml = cleanhtml.replace(/<[^>]*>?/gm, ""); // Strip remaining tags
     // TODO retain soft linebreaks within the paragraph
     return cleanhtml;
